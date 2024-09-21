@@ -1,0 +1,37 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  font-family: "Source Sans Pro", sans-serif !important;
+}
+
+body {
+  min-height: 100vh;
+  background: #FAFAF5;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+.scrollbar-under {
+  padding-right: 2.9375rem;
+  margin-right: -2.5rem;
+
+
+
+  .t-bars {
+    padding-right: 1.25rem;
+    margin-left: -1rem;
+  }
+
+  .t-bar {
+    margin-right: -1rem !important;
+  }
+}

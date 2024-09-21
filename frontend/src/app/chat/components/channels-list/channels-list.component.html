@@ -1,0 +1,8 @@
+<div *ngFor="let channel of channels()">
+  <div>
+    {{channel?.id}}: {{channel?.name}}
+  </div>
+</div>
+
+<input [(ngModel)]="input">
+<button (click)="createChat()">Create channel</button>
