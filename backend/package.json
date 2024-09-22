@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start:json-server": "json-server --watch db.json --port 3000",
+    "start:socket-server": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "json-server": "^1.0.0-beta.2",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
+  }
+}
