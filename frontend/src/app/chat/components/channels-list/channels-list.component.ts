@@ -5,7 +5,7 @@ import {Channel} from "../../interfaces/channel.interface";
 import {CommonModule} from "@angular/common";
 import {tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {TuiButton} from "@taiga-ui/core";
 import {AuthService} from "../../../auth/services/auth.service";
 

@@ -1,9 +1,7 @@
 import {Component, OnInit, signal, WritableSignal} from '@angular/core';
-import {UserProfileService} from "../../services/user-profile.service";
-import {Router, RouterLink} from "@angular/router";
+import {RouterLink} from "@angular/router";
 import {AuthService} from "../../../auth/services/auth.service";
 import {User} from "../../../chat/interfaces/user.interface";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-user-profile',
@@ -20,9 +18,6 @@ export class UserProfileComponent implements OnInit {
 
   constructor(
     private readonly auth: AuthService,
-    private readonly userService: UserProfileService,
-
-    private readonly router: Router,
   ) { }
 
   ngOnInit() {

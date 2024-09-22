@@ -14,18 +14,15 @@ import {WebSocketService} from "../../services/web-socket.service";
 import {FormsModule} from "@angular/forms";
 import {CommonModule, NgForOf} from "@angular/common";
 import {ChannelsListComponent} from "../channels-list/channels-list.component";
-import {concatMap, filter, forkJoin, map, switchMap, tap} from "rxjs";
+import {concatMap, forkJoin, map, tap} from "rxjs";
 import {Message} from "../../interfaces/message.interface";
 import {User} from "../../interfaces/user.interface";
 import {TuiAppearance, TuiButton, TuiScrollbar} from "@taiga-ui/core";
-import {TuiInputInline} from "@taiga-ui/kit";
 import {Channel} from "../../interfaces/channel.interface";
 import {ActivatedRoute} from "@angular/router";
 import {UserProfileService} from "../../../user-profile/services/user-profile.service";
 import {UserChannel} from "../../interfaces/user-channel.interface";
 
-
-const SOME_OFFSET_CONST = 20;
 
 @Component({
   selector: 'app-chat',

@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {ChatService} from "../../services/chat.service";
-import {forkJoin, map, switchMap, tap} from "rxjs";
+import {forkJoin, map, tap} from "rxjs";
 import {AuthService} from "../../../auth/services/auth.service";
 import {UserChannel} from "../../interfaces/user-channel.interface";
 import {Channel} from "../../interfaces/channel.interface";
 import {NgForOf, NgIf} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {TuiButton, TuiDialog, TuiDialogs, TuiDialogService} from "@taiga-ui/core";
+import {Router} from "@angular/router";
+import {TuiButton} from "@taiga-ui/core";
 import {ChannelsListComponent} from "../channels-list/channels-list.component";
 
 @Component({

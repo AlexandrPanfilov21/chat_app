@@ -13,7 +13,7 @@
       </div>
 
       <div class="error-message" *ngIf="(!loginForm.valid && loginForm.dirty)">Пожалуйста, заполните все поля</div>
-      <div class="error-message" *ngIf="showError() && (loginForm.get('username').value && loginForm.get('password').value)">Имя пользователя или пароль введены неверно</div>
+      <div class="error-message" *ngIf="showError() && loginForm.valid">Имя пользователя или пароль введены неверно</div>
 
       <div class="button-container">
         <button tuiButton type="button" appearance="outline" routerLink="../register">Зарегистрироваться</button>
