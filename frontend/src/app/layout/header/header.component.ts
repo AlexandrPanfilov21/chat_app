@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
 import {AuthService} from "../../auth/services/auth.service";
+import {RouterLink} from "@angular/router";
+import {TuiIcon} from "@taiga-ui/core";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink,
+    TuiIcon
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

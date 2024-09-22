@@ -1,11 +1,10 @@
 <header>
   <div>
-    <h1>PanfApp</h1>
+    <h1>ChatApp</h1>
   </div>
 
   <div class="user-data">
-    <div>Пользователь</div>
-    <div>Настройки</div>
-    <div (click)="auth.logout()">Логаут</div>
+    <div class="user" routerLink="user">{{auth.user.username}}</div>
+    <div class="leave" (click)="auth.logout()">Выйти</div>
   </div>
 </header>

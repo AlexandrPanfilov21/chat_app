@@ -1,11 +1,18 @@
 <div class="channel-page">
   <div *ngFor="let channel of channels()">
-    <div class="channel" (click)="changeChannel(channel.id)">
-      #{{channel?.name}}
+    <div class="channel">
+      <div class="channel-name">
+        #{{channel?.name}}
+      </div>
+
+      <button tuiButton appearance="primary" size="s" (click)="joinToChannel(channel)">Вступить</button>
     </div>
   </div>
 
-  <input [(ngModel)]="input">
-  <button (click)="createChat()">Create channel</button>
+  <div class="create-channel">
+    <h2 class="create-channel-title">Создание нового чата</h2>
+    <input [(ngModel)]="input" placeholder="Название чата">
+    <button tuiButton appearance="primary" size="m" (click)="createChat()">Создать новый чат</button>
+  </div>
 
 </div>

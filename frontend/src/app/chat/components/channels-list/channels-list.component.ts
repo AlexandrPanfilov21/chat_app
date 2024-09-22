@@ -6,6 +6,8 @@ import {CommonModule} from "@angular/common";
 import {tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
+import {TuiButton} from "@taiga-ui/core";
+import {AuthService} from "../../../auth/services/auth.service";
 
 @Component({
   selector: 'app-channels-list',
@@ -13,6 +15,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   imports: [
     CommonModule,
     FormsModule,
+    TuiButton,
   ],
   templateUrl: './channels-list.component.html',
   styleUrl: './channels-list.component.scss',
@@ -20,13 +23,17 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class ChannelsListComponent implements OnInit {
 
+  @Output()
+  joinChannel = new EventEmitter();
+
   channels: WritableSignal<Channel[] | []> = signal([]);
   input: string;
 
   constructor(
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+
     private readonly chatService: ChatService,
+    private readonly auth: AuthService,
     private readonly webSocketService: WebSocketService,
   ) { }
 
@@ -51,11 +58,11 @@ export class ChannelsListComponent implements OnInit {
     });
   }
 
-  changeChannel(id) {
-    this.router.navigate([], {
-      queryParams: {
-        channelId: id,
-      }
-    });
+  joinToChannel(channel: Channel) {
+    this.chatService.joinToChannel(this.auth.user, channel)
+      .pipe(
+        tap(() => this.joinChannel.emit())
+      )
+      .subscribe()
   }
 }

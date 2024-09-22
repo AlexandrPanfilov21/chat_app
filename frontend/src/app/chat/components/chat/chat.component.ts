@@ -22,6 +22,7 @@ import {TuiInputInline} from "@taiga-ui/kit";
 import {Channel} from "../../interfaces/channel.interface";
 import {ActivatedRoute} from "@angular/router";
 import {UserProfileService} from "../../../user-profile/services/user-profile.service";
+import {UserChannel} from "../../interfaces/user-channel.interface";
 
 
 const SOME_OFFSET_CONST = 20;
@@ -50,6 +51,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   messages: WritableSignal<Partial<Message[]>> = signal([]);
   channel: WritableSignal<Partial<Channel>> = signal({});
+  channelId: WritableSignal<string> = signal('');
   newMessage: string = '';
 
   constructor(
@@ -62,31 +64,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      const id = params['channelId'];
-      this.chatService.getMessages(id)
-        .pipe(
-          filter(messages => {
-            this.messages.set([]);
-            return messages.length
-          }),
-          // Можно заранее получать список пользователей и фильтровать, используя js, во мзбежание большого количество запросов
-          // Но потенциально нет смысла получать всех пользователей для этого, учитывая, что их может быть больше
-          // В общем решил сделать так, но можно будет переделать
-          concatMap((messages: Message[]) =>
-            forkJoin(
-              messages.map((message: Message) => {
+      this.channelId.set(params['channelId']);
 
-                return this.userService.getUserById(message.from_user).pipe(
-                  map((user: User) => ({...message, username: user.username})),
-                  )
-                }
-              )
-            )
-          ),
-          tap(message => this.messages.set(message))
-        ).subscribe();
-
-      this.getChannel(id);
+      if (this.channelId()) {
+        this.checkIsOwnChat();
+      }
     });
 
     this.webSocketService.getMessages()
@@ -107,8 +89,44 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.scrollBottom();
   }
 
-  getChannel(id) {
-    this.chatService.getChannelById(id)
+  checkIsOwnChat() {
+    this.chatService.getUserChannels(this.user)
+      .pipe(
+        tap((userChannel: UserChannel[]) => {
+          const isOwn = userChannel.some((el: UserChannel) => el.channel_id == this.channelId());
+
+          if (isOwn) {
+            this.getMessages();
+            this.getChannel();
+          } else {
+            this.channelId.set('')
+          }
+        })
+      ).subscribe()
+  }
+
+  getMessages() {
+    this.chatService.getMessages(this.channelId())
+      .pipe(
+        // Можно заранее получать список пользователей и фильтровать, используя js, во мзбежание большого количество запросов
+        // Но потенциально нет смысла получать всех пользователей для этого, учитывая, что их может быть больше
+        // В общем решил сделать так, но можно будет переделать
+        concatMap((messages: Message[]) =>
+          forkJoin(
+            messages.map((message: Message) => {
+                return this.userService.getUserById(message.from_user).pipe(
+                  map((user: User) => ({...message, username: user.username})),
+                )
+              }
+            )
+          )
+        ),
+        tap(message => this.messages.set(message))
+      ).subscribe();
+  }
+
+  getChannel() {
+    this.chatService.getChannelById(this.channelId())
       .pipe(
         tap((channel: Channel) => this.channel.set(channel))
       )

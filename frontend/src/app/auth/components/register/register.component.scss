@@ -33,7 +33,7 @@
         }
 
         input {
-          width: 100%;
+          width: 90%;
         }
       }
 
@@ -42,12 +42,12 @@
         font-weight: 600;
         color: #de1111;
       }
-    }
 
-    .button-container {
-      display: flex;
-      gap: 1rem;
-      justify-content: space-between;
+      .button-container {
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+      }
     }
   }
 }

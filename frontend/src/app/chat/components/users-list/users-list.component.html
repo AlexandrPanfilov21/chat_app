@@ -1,0 +1,14 @@
+<div class="users-page">
+  <h2 class="title">Пользователи</h2>
+  <div *ngFor="let user of users()">
+    <div class="user">
+      <ng-container [ngSwitch]="user.is_online">
+        <div *ngSwitchCase="true" class="online"></div>
+        <div *ngSwitchCase="false" class="offline"></div>
+      </ng-container>
+      <div class="user-name">
+        <div>{{user.username}}</div>
+      </div>
+    </div>
+  </div>
+</div>

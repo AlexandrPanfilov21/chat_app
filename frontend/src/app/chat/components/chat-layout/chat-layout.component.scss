@@ -3,6 +3,13 @@
   display: flex;
   gap: 3rem;
 
+  &-right {
+
+    .channels {
+      margin-bottom: 5rem;
+    }
+  }
+
   .chat {
     width: 100%;
   }

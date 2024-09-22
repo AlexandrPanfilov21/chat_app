@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {tap} from "rxjs";
+import {Observable, tap} from "rxjs";
+import {User} from "../../chat/interfaces/user.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class UserProfileService {
     private http: HttpClient,
   ) { }
 
-  getUsers() {
-    return this.http.get(`${this.apiUrl}/users`);
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`);
   }
 
-  getUserById(userId: string | number) {
-    return this.http.get(`${this.apiUrl}/users/${userId}`);
+  getUserById(userId: string | number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/users/${userId}`);
   }
 }

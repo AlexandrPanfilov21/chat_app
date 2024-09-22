@@ -1,0 +1,23 @@
+<div class="channel-page">
+  <h2 class="title">Мои чаты</h2>
+  <div *ngFor="let channel of myChannels()">
+    <div class="channel" (click)="changeChannel(channel.id)">
+      #{{channel?.name}}
+    </div>
+  </div>
+
+  <div>
+    <button tuiButton (click)="addChannel()" appearance="primary" size="m">+ Добавить чат</button>
+  </div>
+</div>
+
+<ng-container *ngIf="openModalChannels()">
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h1 class="modal-content-title">Список всех чатов</h1>
+      <app-channels-list (joinChannel)="getMyChannels(); openModalChannels.set(false);"></app-channels-list>
+      <button tuiButton appearance="secondary" size="m" (click)="closeModal()">Закрыть</button>
+    </div>
+  </div>
+</ng-container>
+

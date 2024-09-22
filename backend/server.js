@@ -9,18 +9,6 @@ const wss = new WebSocket.Server({ server });
 
 app.use(bodyParser.json());
 
-// Пример обработки POST-запроса на /login
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-
-    // Здесь можно добавить логику проверки данных
-    if (username === 'admin' && password === 'admin') {
-        return res.status(200).json({ token: 'fake-jwt-token' });
-    } else {
-        return res.status(401).json({ message: 'Invalid credentials' });
-    }
-});
-
 wss.on('connection', (ws) => {
     console.log('New client connected');
 
@@ -53,6 +41,16 @@ wss.on('connection', (ws) => {
                 console.log(parsedMessage);
                 // Логика для создания канала (можно обновить БД или список каналов)
                 // Отправляем обратно подтверждение о создании канала
+                wss.clients.forEach((client) => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify(parsedMessage));
+                    }
+                });
+                break;
+
+            case 'status_change':
+                console.log(`User ${parsedMessage.user_id} is ${parsedMessage.status}`);
+                // Отправляем статус всем подключенным клиентам
                 wss.clients.forEach((client) => {
                     if (client.readyState === WebSocket.OPEN) {
                         client.send(JSON.stringify(parsedMessage));

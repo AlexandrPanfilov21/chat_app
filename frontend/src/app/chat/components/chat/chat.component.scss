@@ -1,7 +1,7 @@
 .chat-channel {
   font-size: 1.5rem;
   font-weight: 800;
-  background: gray;
+  background: #808080FF;
   border-radius: 0.625rem 0.625rem 0 0;
   padding: 1rem;
 }
@@ -19,8 +19,11 @@
 
 
   .message {
-    display: flex;
-    gap: 1rem;
+
+    &-form {
+      display: flex;
+      gap: 1rem;
+    }
 
     input {
       width: 100%;
@@ -57,4 +60,10 @@
       }
     }
   }
+}
+
+.none-chat {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
 }

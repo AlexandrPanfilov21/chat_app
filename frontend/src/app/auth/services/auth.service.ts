@@ -10,15 +10,10 @@ import {UserProfileService} from "../../user-profile/services/user-profile.servi
 })
 export class AuthService {
 
-  user: User = {
-    id: 1,
-    username: 'Sasha',
-    password: '123',
-    is_online: true,
-  }
+  user: User;
   changeUser: Subject<void> = new Subject();
 
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl: string = 'http://localhost:3000';
 
   constructor(
     private readonly userService: UserProfileService,
@@ -30,10 +25,11 @@ export class AuthService {
       if (localStorage.getItem('user')) {
         this.user = (JSON.parse(localStorage.getItem('user')) as unknown as User);
       }
-    })
+    });
+    this.user = (JSON.parse(localStorage.getItem('user')) as unknown as User);
   }
 
-  login(): Observable<any> {
+  login(): Observable<User[]> {
     return this.userService.getUsers()
       .pipe(
         tap(() => {
@@ -42,11 +38,11 @@ export class AuthService {
       );
   }
 
-  register(user): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users`, user)
+  register(user): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/users`, user)
   }
 
-  logout() {
+  logout(): void {
     localStorage.clear();
     this.router.navigate(['login']);
   }

@@ -4,34 +4,13 @@
       "id": "1",
       "username": "john_doe",
       "password": "password123",
-      "is_online": true
+      "is_online": false
     },
     {
       "id": "2",
       "username": "jane_doe",
       "password": "securepassword",
       "is_online": false
-    },
-    {
-      "id": "3",
-      "username": "Sasha Pan",
-      "password": "123",
-      "is_online": true
-    },
-    {
-      "id": "be09",
-      "username": "admin",
-      "password": "admin"
-    },
-    {
-      "id": "0827",
-      "username": "zxcv",
-      "password": "zxcv"
-    },
-    {
-      "id": "1e4e",
-      "username": "",
-      "password": ""
     }
   ],
   "channels": [
@@ -44,12 +23,12 @@
       "name": "Development"
     },
     {
-      "id": "b945",
-      "name": "adsfasfasdf"
+      "id": "6fe2",
+      "name": "asdsadasd"
     },
     {
-      "id": "cec5",
-      "name": "asdfaf"
+      "id": "2ed8",
+      "name": "Test create"
     }
   ],
   "messages": [
@@ -60,28 +39,52 @@
       "content": "Hello everyone!"
     },
     {
-      "id": "c543",
-      "from_user": "1",
-      "channel_id": "1",
-      "content": "dfasdfasdfasd"
-    },
-    {
-      "id": "60f4",
+      "id": "af0e",
       "from_user": "2",
       "channel_id": "1",
-      "content": "huy"
+      "content": "sdfsdfsdf"
     },
     {
-      "id": "22dd",
+      "id": "4b23",
       "from_user": "1",
-      "channel_id": "2",
-      "content": "adfdafadsf"
+      "channel_id": "1",
+      "content": "asdsad"
     },
     {
-      "id": "518f",
-      "from_user": "be09",
+      "id": "3153",
+      "from_user": "1",
       "channel_id": "1",
-      "content": "sfdgsdgsdfg"
+      "content": "s"
+    },
+    {
+      "id": "699f",
+      "from_user": "1",
+      "channel_id": "1",
+      "content": "adfadfadsf"
+    },
+    {
+      "id": "3d51",
+      "from_user": "1",
+      "channel_id": "1",
+      "content": "aaaaa"
+    },
+    {
+      "id": "64be",
+      "from_user": "1",
+      "channel_id": "1",
+      "content": "dddd"
+    },
+    {
+      "id": "24d2",
+      "from_user": "1",
+      "channel_id": "1",
+      "content": "asdfdasfdasf"
+    },
+    {
+      "id": "68f8",
+      "from_user": "1",
+      "channel_id": "6fe2",
+      "content": "sdgsdfgsdfgsdfg"
     }
   ],
   "user_channels": [
@@ -94,6 +97,26 @@
       "user_id": "2",
       "channel_id": "1",
       "id": "6464"
+    },
+    {
+      "id": "ec6b",
+      "user_id": "1",
+      "channel_id": "6fe2"
+    },
+    {
+      "id": "e274",
+      "user_id": "1",
+      "channel_id": "2"
+    },
+    {
+      "id": "729a",
+      "user_id": "1",
+      "channel_id": "2ed8"
+    },
+    {
+      "id": "55f8",
+      "user_id": "2",
+      "channel_id": "6fe2"
     }
   ]
 }

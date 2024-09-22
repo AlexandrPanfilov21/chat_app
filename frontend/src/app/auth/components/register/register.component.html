@@ -13,11 +13,11 @@
       </div>
 
       <div class="error-message" *ngIf="!registerForm.valid && registerForm.dirty">Пожалуйста, заполните все поля</div>
-    </form>
 
-    <div class="button-container">
-      <button tuiButton appearance="outline" routerLink="../login">Вернуться к форме авторизации</button>
-      <button tuiButton appearance="primary" (click)="register()">Зарегистрироваться</button>
-    </div>
+      <div class="button-container">
+        <button tuiButton type="button" appearance="outline" routerLink="../login">Вернуться к форме авторизации</button>
+        <button tuiButton appearance="primary" (click)="register()">Зарегистрироваться</button>
+      </div>
+    </form>
   </div>
 </div>

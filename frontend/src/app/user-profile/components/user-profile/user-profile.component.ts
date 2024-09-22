@@ -1,6 +1,6 @@
 import {Component, OnInit, signal, WritableSignal} from '@angular/core';
 import {UserProfileService} from "../../services/user-profile.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../../auth/services/auth.service";
 import {User} from "../../../chat/interfaces/user.interface";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -8,7 +8,9 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
 })

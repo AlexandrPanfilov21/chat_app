@@ -35,7 +35,6 @@ export class WebSocketService {
       type: 'channel_created',
       ...channel
     };
-    console.log(channelPayload);
     this.socket$.next(channelPayload);
   }
 
@@ -43,6 +42,22 @@ export class WebSocketService {
   getChannel(): Observable<Channel> {
     return this.socket$.pipe(
       filter(message => message.type === 'channel_created') // Фильтруем только события создания канала
+    );
+  }
+
+  updateUserStatus(userId: string, status: boolean) {
+    const statusPayload = {
+      type: 'status_change',
+      user_id: userId,
+      status: status
+    };
+    this.socket$.next(statusPayload);
+  }
+
+  // Получение обновлений статуса через WebSocket
+  getUserStatusChanges(): Observable<{ user_id: string, status: boolean }> {
+    return this.socket$.pipe(
+      filter(message => message.type === 'status_change')
     );
   }
 }

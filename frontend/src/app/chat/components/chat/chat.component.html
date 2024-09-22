@@ -1,23 +1,30 @@
-<div class="chat-channel">#{{channel().name}}</div>
-<div class="chat">
-  <tui-scrollbar class="scrollbar-under chat-scroll">
-    <div class="messages">
-      <ng-container *ngFor="let message of messages()">
-        <div class="other-message" *ngIf="user.id != message.from_user && channel().id == message.channel_id">
-          <div class="user">{{message.username}}</div>
-          <div>{{message.content}}</div>
-        </div>
-        <div class="myself-message" *ngIf="user.id == message.from_user && channel().id == message.channel_id">
-          <div class="user">{{message.username}}</div>
-          <div>{{message.content}}</div>
-        </div>
-      </ng-container>
+<ng-container *ngIf="channelId()">
+  <div class="chat-channel">#{{channel().name}}</div>
+  <div class="chat">
+    <tui-scrollbar class="scrollbar-under chat-scroll">
+      <div class="messages">
+        <ng-container *ngFor="let message of messages()">
+          <div class="other-message" *ngIf="user.id != message.from_user && channel().id == message.channel_id">
+            <div class="user">{{message.username}}</div>
+            <div>{{message.content}}</div>
+          </div>
+          <div class="myself-message" *ngIf="user.id == message.from_user && channel().id == message.channel_id">
+            <div class="user">{{message.username}}</div>
+            <div>{{message.content}}</div>
+          </div>
+        </ng-container>
+      </div>
+    </tui-scrollbar>
+
+    <div class="message">
+      <form class="message-form" (ngSubmit)="sendMessage()">
+        <input [(ngModel)]="newMessage" [ngModelOptions]="{standalone: true}" placeholder="Введите сообщение"/>
+        <button type="submit" tuiButton appearance="primary" size="s">Отправить</button>
+      </form>
     </div>
-  </tui-scrollbar>
-
-  <div class="message">
-    <input [(ngModel)]="newMessage" placeholder="Type a message"/>
-    <button type="submit" tuiButton (click)="sendMessage()" appearance="primary" size="s">Отправить</button>
   </div>
+</ng-container>
 
-</div>
+<ng-container *ngIf="!channelId()">
+  <div class="none-chat">Выберите доступный чат, чтобы начать общение</div>
+</ng-container>
