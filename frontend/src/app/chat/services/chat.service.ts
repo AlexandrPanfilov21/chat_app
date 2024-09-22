@@ -26,6 +26,10 @@ export class ChatService {
     return this.http.get(`${this.apiUrl}/channels`);
   }
 
+  getChannelById(channelId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/channels/${channelId}`);
+  }
+
   createChannel(channel): Observable<any> {
     return this.http.post(`${this.apiUrl}/channels`, channel);
   }

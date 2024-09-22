@@ -1,0 +1,24 @@
+<div class="authorization-page">
+  <div class="authorization">
+    <h2 class="title">Авторизация</h2>
+    <form [formGroup]="loginForm" class="form">
+      <div class="form-input">
+        <div class="label">Имя пользователя</div>
+        <input formControlName="username">
+      </div>
+
+      <div class="form-input">
+        <div class="label">Пароль</div>
+        <input formControlName="password">
+      </div>
+
+      <div class="error-message" *ngIf="(!loginForm.valid && loginForm.dirty)">Пожалуйста, заполните все поля</div>
+      <div class="error-message" *ngIf="showError() && (loginForm.get('username').value && loginForm.get('password').value)">Имя пользователя или пароль введены неверно</div>
+    </form>
+
+    <div class="button-container">
+      <button tuiButton appearance="outline" routerLink="../register">Зарегистрироваться</button>
+      <button tuiButton appearance="primary" (click)="login()">Войти</button>
+    </div>
+  </div>
+</div>

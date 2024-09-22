@@ -1,8 +1,11 @@
-<div *ngFor="let channel of channels()">
-  <div>
-    {{channel?.id}}: {{channel?.name}}
+<div class="channel-page">
+  <div *ngFor="let channel of channels()">
+    <div class="channel" (click)="changeChannel(channel.id)">
+      #{{channel?.name}}
+    </div>
   </div>
-</div>
 
-<input [(ngModel)]="input">
-<button (click)="createChat()">Create channel</button>
+  <input [(ngModel)]="input">
+  <button (click)="createChat()">Create channel</button>
+
+</div>

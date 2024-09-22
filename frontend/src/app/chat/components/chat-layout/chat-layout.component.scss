@@ -1,4 +1,9 @@
 .chat-page {
+  width: 100%;
   display: flex;
   gap: 3rem;
+
+  .chat {
+    width: 100%;
+  }
 }

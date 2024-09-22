@@ -1,14 +1,23 @@
+<div class="chat-channel">#{{channel().name}}</div>
 <div class="chat">
-  <tui-scrollbar style="max-height: 20rem" class="scrollbar-under">
-    <ng-container *ngFor="let message of messages()">
-      <div class="other-message" *ngIf="user.id !== message.from_user">{{message.content}}</div>
-      <div class="myself-message" *ngIf="user.id == message.from_user">{{message.content}}</div>
-    </ng-container>
+  <tui-scrollbar class="scrollbar-under chat-scroll">
+    <div class="messages">
+      <ng-container *ngFor="let message of messages()">
+        <div class="other-message" *ngIf="user.id != message.from_user && channel().id == message.channel_id">
+          <div class="user">{{message.username}}</div>
+          <div>{{message.content}}</div>
+        </div>
+        <div class="myself-message" *ngIf="user.id == message.from_user && channel().id == message.channel_id">
+          <div class="user">{{message.username}}</div>
+          <div>{{message.content}}</div>
+        </div>
+      </ng-container>
+    </div>
   </tui-scrollbar>
 
-  <div>
-    <input [(ngModel)]="newMessage" placeholder="Type a message" />
-    <button (click)="sendMessage()">Отправить</button>
+  <div class="message">
+    <input [(ngModel)]="newMessage" placeholder="Type a message"/>
+    <button type="submit" tuiButton (click)="sendMessage()" appearance="primary" size="s">Отправить</button>
   </div>
 
 </div>

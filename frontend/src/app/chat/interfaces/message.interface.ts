@@ -5,4 +5,5 @@ export interface Message {
   channel_id: string; // ID канала, в который было отправлено сообщение
   content: string;    // Содержание сообщения
   type?: string;
+  username?: string;
 }

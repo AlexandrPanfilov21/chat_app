@@ -1,0 +1,23 @@
+<div class="register-page">
+  <div class="register">
+    <h2 class="title">Регистрация</h2>
+    <form [formGroup]="registerForm" class="form">
+      <div class="form-input">
+        <div class="label">Имя пользователя</div>
+        <input formControlName="username">
+      </div>
+
+      <div class="form-input">
+        <div class="label">Пароль</div>
+        <input formControlName="password">
+      </div>
+
+      <div class="error-message" *ngIf="!registerForm.valid && registerForm.dirty">Пожалуйста, заполните все поля</div>
+    </form>
+
+    <div class="button-container">
+      <button tuiButton appearance="outline" routerLink="../login">Вернуться к форме авторизации</button>
+      <button tuiButton appearance="primary" (click)="register()">Зарегистрироваться</button>
+    </div>
+  </div>
+</div>

@@ -1,10 +1,11 @@
-import {Component, OnInit, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, signal, WritableSignal} from '@angular/core';
 import {ChatService} from "../../services/chat.service";
 import {WebSocketService} from "../../services/web-socket.service";
 import {Channel} from "../../interfaces/channel.interface";
 import {CommonModule} from "@angular/common";
 import {tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-channels-list',
@@ -14,14 +15,17 @@ import {FormsModule} from "@angular/forms";
     FormsModule,
   ],
   templateUrl: './channels-list.component.html',
-  styleUrl: './channels-list.component.scss'
+  styleUrl: './channels-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChannelsListComponent implements OnInit {
 
-  public channels: WritableSignal<Channel[] | []> = signal([]);
+  channels: WritableSignal<Channel[] | []> = signal([]);
   input: string;
 
   constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly chatService: ChatService,
     private readonly webSocketService: WebSocketService,
   ) { }
@@ -44,6 +48,14 @@ export class ChannelsListComponent implements OnInit {
 
       this.webSocketService.createChannel(channelResponse);
       this.input = '';
+    });
+  }
+
+  changeChannel(id) {
+    this.router.navigate([], {
+      queryParams: {
+        channelId: id,
+      }
     });
   }
 }

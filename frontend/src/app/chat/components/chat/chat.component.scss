@@ -1,9 +1,60 @@
+.chat-channel {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: gray;
+  border-radius: 0.625rem 0.625rem 0 0;
+  padding: 1rem;
+}
+
 .chat {
+  height: 65vh;
+  max-width: 100%;
   padding: 2rem;
-  border-radius: 0.625rem;
-  width: 100%;
+  border-radius: 0 0 0.625rem 0.625rem;
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   background-color: #D3D3D3;
   gap: 1.5rem;
+
+
+  .message {
+    display: flex;
+    gap: 1rem;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .other-message {
+      font-size: 1rem;
+      font-weight: 400;
+      align-self: start;
+
+      .user {
+        font-weight: 600;
+        font-size: 1.25rem;
+        margin-bottom: 0.625rem;
+      }
+    }
+
+    .myself-message {
+      font-size: 1rem;
+      font-weight: 400;
+      align-self: end;
+
+      .user {
+        text-align: end;
+        font-weight: 600;
+        font-size: 1.25rem;
+        margin-bottom: 0.625rem;
+      }
+    }
+  }
 }
