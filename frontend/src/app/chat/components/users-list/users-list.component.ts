@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import {User} from "../../interfaces/user.interface";
 import {UserProfileService} from "../../../user-profile/services/user-profile.service";
-import {tap} from "rxjs";
+import {Subject, takeUntil, tap} from "rxjs";
 import {NgForOf, NgSwitch, NgSwitchCase} from "@angular/common";
 import {TuiButton} from "@taiga-ui/core";
 import {WebSocketService} from "../../services/web-socket.service";
@@ -20,9 +20,11 @@ import {AuthService} from "../../../auth/services/auth.service";
   styleUrl: './users-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy {
 
   users: WritableSignal<User[]> = signal([]);
+
+  destroy$: Subject<void> = new Subject();
 
   constructor(
     private readonly userService: UserProfileService,
@@ -35,10 +37,16 @@ export class UsersListComponent implements OnInit {
     this.listenForStatusChanges();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getUsers() {
     this.userService.getUsers()
       .pipe(
-        tap((users: User[])  => this.users.set(users.filter(user => user.id != this.auth.user.id)))
+        tap((users: User[])  => this.users.set(users.filter(user => user.id != this.auth.user.id))),
+        takeUntil(this.destroy$),
       ).subscribe()
   }
 
@@ -55,7 +63,8 @@ export class UsersListComponent implements OnInit {
           });
 
           this.users.set(updateUsers);
-        })
+        }),
+        takeUntil(this.destroy$),
       ).subscribe();
   }
 }

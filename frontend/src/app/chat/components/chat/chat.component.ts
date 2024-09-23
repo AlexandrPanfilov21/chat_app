@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Input,
+  Input, OnDestroy,
   OnInit,
   signal,
   ViewChild,
@@ -14,7 +14,7 @@ import {WebSocketService} from "../../services/web-socket.service";
 import {FormsModule} from "@angular/forms";
 import {CommonModule, NgForOf} from "@angular/common";
 import {ChannelsListComponent} from "../channels-list/channels-list.component";
-import {concatMap, forkJoin, map, tap} from "rxjs";
+import {concatMap, forkJoin, map, Subject, takeUntil, tap} from "rxjs";
 import {Message} from "../../interfaces/message.interface";
 import {User} from "../../interfaces/user.interface";
 import {TuiAppearance, TuiButton, TuiScrollbar} from "@taiga-ui/core";
@@ -40,7 +40,7 @@ import {UserChannel} from "../../interfaces/user-channel.interface";
   styleUrl: './chat.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChatComponent implements OnInit, AfterViewInit {
+export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() user: User;
   @ViewChild(TuiScrollbar, {read: ElementRef})
@@ -51,6 +51,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
   channelId: WritableSignal<string> = signal('');
   newMessage: string = '';
 
+  destroy$: Subject<void> = new Subject();
+
   constructor(
     private readonly userService: UserProfileService,
     private readonly chatService: ChatService,
@@ -60,7 +62,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$),
+      ).subscribe(params => {
       this.channelId.set(params['channelId']);
 
       if (this.channelId()) {
@@ -79,11 +84,17 @@ export class ChatComponent implements OnInit, AfterViewInit {
             )
           )
         ),
+        takeUntil(this.destroy$),
       ).subscribe();
   }
 
   ngAfterViewInit() {
     this.scrollBottom();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   checkIsOwnChat() {
@@ -98,7 +109,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
           } else {
             this.channelId.set('')
           }
-        })
+        }),
+        takeUntil(this.destroy$),
       ).subscribe()
   }
 
@@ -118,14 +130,16 @@ export class ChatComponent implements OnInit, AfterViewInit {
             )
           )
         ),
-        tap(message => this.messages.set(message))
+        tap(message => this.messages.set(message)),
+        takeUntil(this.destroy$),
       ).subscribe();
   }
 
   getChannel() {
     this.chatService.getChannelById(this.channelId())
       .pipe(
-        tap((channel: Channel) => this.channel.set(channel))
+        tap((channel: Channel) => this.channel.set(channel)),
+        takeUntil(this.destroy$),
       )
       .subscribe()
   }
@@ -134,7 +148,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
     const message = { from_user: this.user.id, channel_id: this.channel().id, content: this.newMessage };
 
     if (this.newMessage) {
-      this.chatService.sendMessage(message).subscribe((messageResponse) => {
+      this.chatService.sendMessage(message)
+        .pipe(
+          takeUntil(this.destroy$),
+        )
+        .subscribe((messageResponse) => {
         this.webSocketService.sendMessage(messageResponse);
         this.newMessage = '';
         this.scrollBottom();

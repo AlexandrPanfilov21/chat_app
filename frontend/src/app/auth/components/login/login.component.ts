@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TuiButton} from "@taiga-ui/core";
 import {User} from "../../../chat/interfaces/user.interface";
-import {tap} from "rxjs";
+import {Subject, takeUntil, tap} from "rxjs";
 import {Router, RouterLink} from "@angular/router";
 import {NgIf} from "@angular/common";
 
@@ -20,11 +20,13 @@ import {NgIf} from "@angular/common";
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm: FormGroup;
   isLogin: WritableSignal<boolean> = signal(false);
   showError: WritableSignal<boolean> = signal(false);
+
+  destroy$: Subject<void> = new Subject();
 
   constructor(
     private readonly fb: FormBuilder,
@@ -34,6 +36,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initForm() {
@@ -62,6 +69,7 @@ export class LoginComponent implements OnInit {
               }
             })
           }),
+          takeUntil(this.destroy$),
         )
         .subscribe()
     }

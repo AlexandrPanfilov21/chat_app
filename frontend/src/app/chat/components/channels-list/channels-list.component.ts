@@ -1,9 +1,18 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, signal, WritableSignal} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  signal,
+  WritableSignal
+} from '@angular/core';
 import {ChatService} from "../../services/chat.service";
 import {WebSocketService} from "../../services/web-socket.service";
 import {Channel} from "../../interfaces/channel.interface";
 import {CommonModule} from "@angular/common";
-import {tap} from "rxjs";
+import {Subject, takeUntil, tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {TuiButton} from "@taiga-ui/core";
@@ -21,13 +30,15 @@ import {AuthService} from "../../../auth/services/auth.service";
   styleUrl: './channels-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChannelsListComponent implements OnInit {
+export class ChannelsListComponent implements OnInit, OnDestroy {
 
   @Output()
   joinChannel = new EventEmitter();
 
   channels: WritableSignal<Channel[] | []> = signal([]);
   input: string;
+
+  destroy$: Subject<void> = new Subject();
 
   constructor(
     private readonly router: Router,
@@ -41,17 +52,27 @@ export class ChannelsListComponent implements OnInit {
     this.chatService.getChannels()
       .pipe(
         tap(channels => this.channels.set(channels)),
+        takeUntil(this.destroy$),
       ).subscribe()
 
     this.webSocketService.getChannel()
       .pipe(
         tap((channel: Channel) => this.channels.set([...this.channels(), channel])),
+        takeUntil(this.destroy$),
       ).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   createChat() {
     const channel = { name: this.input }
-    this.chatService.createChannel(channel).subscribe((channelResponse) => {
+    this.chatService.createChannel(channel)
+      .pipe(
+        takeUntil(this.destroy$),
+      ).subscribe((channelResponse) => {
 
       this.webSocketService.createChannel(channelResponse);
       this.input = '';
@@ -61,7 +82,8 @@ export class ChannelsListComponent implements OnInit {
   joinToChannel(channel: Channel) {
     this.chatService.joinToChannel(this.auth.user, channel)
       .pipe(
-        tap(() => this.joinChannel.emit())
+        tap(() => this.joinChannel.emit()),
+        takeUntil(this.destroy$),
       )
       .subscribe()
   }

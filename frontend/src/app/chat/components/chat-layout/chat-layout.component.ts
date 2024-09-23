@@ -41,7 +41,6 @@ export class ChatLayoutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Устанавливаем статус offline при уничтожении компонента
-    //@ts-ignore
-    this.webSocketService.updateUserStatus(this.user.id, false);
+    this.webSocketService.updateUserStatus(this.user.id as string, false);
   }
 }

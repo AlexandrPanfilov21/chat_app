@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, Inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import {ChatService} from "../../services/chat.service";
-import {forkJoin, map, tap} from "rxjs";
+import {forkJoin, map, Subject, takeUntil, tap} from "rxjs";
 import {AuthService} from "../../../auth/services/auth.service";
 import {UserChannel} from "../../interfaces/user-channel.interface";
 import {Channel} from "../../interfaces/channel.interface";
@@ -24,10 +24,11 @@ import {ChannelsListComponent} from "../channels-list/channels-list.component";
   styleUrl: './my-channels-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MyChannelsListComponent implements OnInit {
+export class MyChannelsListComponent implements OnInit, OnDestroy {
 
   myChannels: WritableSignal<Channel[]> = signal([]);
   openModalChannels: WritableSignal<boolean> = signal(false);
+  destroy$: Subject<void> = new Subject();
 
   constructor(
     private readonly chatService: ChatService,
@@ -40,6 +41,11 @@ export class MyChannelsListComponent implements OnInit {
     this.getMyChannels();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getMyChannels() {
     forkJoin({
       userChannels: this.chatService.getUserChannels(this.auth.user),
@@ -50,7 +56,8 @@ export class MyChannelsListComponent implements OnInit {
           return allChannels.find((channel: Channel) => channel.id === userChannel.channel_id);
         });
       }),
-      tap(myChannels => this.myChannels.set(myChannels))
+      tap(myChannels => this.myChannels.set(myChannels)),
+      takeUntil(this.destroy$),
     ).subscribe();
   }
 
